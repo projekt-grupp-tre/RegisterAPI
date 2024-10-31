@@ -1,4 +1,7 @@
 using Data.Context;
+using Data.Interfaces;
+using Data.Repositories;
+using Data.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +11,8 @@ builder.Services.AddDbContext<DBContext>(x => x.UseSqlServer(builder.Configurati
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserServices>();
 
 
 var app = builder.Build();

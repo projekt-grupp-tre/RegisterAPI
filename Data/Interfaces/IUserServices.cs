@@ -1,7 +1,6 @@
-﻿namespace Data.Interfaces
+﻿namespace Data.Interfaces;
+
+public interface IUserServices
 {
-    public interface IUserServices
-    {
-        bool CheckIfEmailExistsAsync(string email);
-    }
+    bool CheckIfEmailExistsAsync(string email);
 }

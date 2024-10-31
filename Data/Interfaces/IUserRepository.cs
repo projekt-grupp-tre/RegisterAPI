@@ -1,5 +1,4 @@
-﻿using Data.Entities;
-using Data.Models;
+﻿using Data.Models;
 
 namespace Data.Interfaces;
 
