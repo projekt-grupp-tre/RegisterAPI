@@ -20,7 +20,7 @@ public class TestServices
     }
 
     [Fact]
-    public void CheckIfEmailAlreadyExists_ShouldCheckIfEmailAlreadyIsRegisteredInDatabase_ThenReturnTrueIfEmailExists()
+    public void CheckIfEmailAlreadyExists_ShouldCheckIfEmailAlreadyExist_ThenReturnTrueIfEmailExists()
     {
         //Arrange
         SignUpModel user = new SignUpModel { FirstName = "Test", LastName = "Testsson", Email = "test@test.se", Password = "Bytmig123!" };
@@ -34,7 +34,7 @@ public class TestServices
     }
 
     [Fact]
-    public void CheckIfEmailAlreadyExists_ShouldCheckIfEmailAlreadyIsRegisteredInDatabase_ThenReturnFalseIfEmailIsUnique()
+    public void CheckIfEmailAlreadyExists_ShouldCheckIfEmailAlreadyExist_ThenReturnFalseIfEmailIsUnique()
     {
         //Arrange
         SignUpModel user = new SignUpModel { FirstName = "Test", LastName = "Testsson", Email = "test@test.se", Password = "Bytmig123!" };
@@ -46,4 +46,23 @@ public class TestServices
         //Assert
         Assert.False(result);
     }
+
+    [Fact]
+    public void CheckIfEmailAlreadyExists_ShouldCheckIfEmailAlreadyIsRegisteredInDatabase_ThenReturnTrueIfEmailExists()
+    {
+        //Arrange
+        SignUpModel user = new SignUpModel { FirstName = "Test", LastName = "Testsson", Email = "test@test.se", Password = "Bytmig123!" };
+        UserEntity userEntity = new UserEntity { FirstName = "Test", LastName = "Testsson", Email = "test@test.se" };
+        _context.Users.Add(userEntity);
+        _context.SaveChanges();
+        IUserServices userServices = new UserServices(_context);
+
+        //Act
+        var result = userServices.CheckIfEmailExistsAsync(user.Email);
+
+        //Assert
+        Assert.True(result);
+    }
+
+    
 }
