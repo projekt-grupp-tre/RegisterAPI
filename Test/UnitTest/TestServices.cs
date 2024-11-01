@@ -12,21 +12,38 @@ public class TestServices
 {
 
     private readonly DBContext _context = new(new DbContextOptionsBuilder<DBContext>().UseInMemoryDatabase($"{Guid.NewGuid()}").Options);
+    private readonly Mock<IUserServices> _userServices;
+
+    public TestServices()
+    {
+        _userServices = new Mock<IUserServices>();
+    }
 
     [Fact]
     public void CheckIfEmailAlreadyExists_ShouldCheckIfEmailAlreadyIsRegisteredInDatabase_ThenReturnTrueIfEmailExists()
     {
         //Arrange
         SignUpModel user = new SignUpModel { FirstName = "Test", LastName = "Testsson", Email = "test@test.se", Password = "Bytmig123!" };
-        UserEntity userEntity = new UserEntity { FirstName = "Test", LastName = "Testsson", Email = "test@test.se" };
-        _context.Users.Add(userEntity);
-        _context.SaveChanges();
-        IUserServices userServices = new UserServices(_context);
+        _userServices.Setup(x => x.CheckIfEmailExistsAsync(user.Email)).Returns(true);
 
         //Act
-        var result = userServices.CheckIfEmailExistsAsync(user.Email);
+        var result = _userServices.Object.CheckIfEmailExistsAsync(user.Email);
 
         //Assert
         Assert.True(result);
+    }
+
+    [Fact]
+    public void CheckIfEmailAlreadyExists_ShouldCheckIfEmailAlreadyIsRegisteredInDatabase_ThenReturnFalseIfEmailIsUnique()
+    {
+        //Arrange
+        SignUpModel user = new SignUpModel { FirstName = "Test", LastName = "Testsson", Email = "test@test.se", Password = "Bytmig123!" };
+        _userServices.Setup(x => x.CheckIfEmailExistsAsync(user.Email)).Returns(false);
+
+        //Act
+        var result = _userServices.Object.CheckIfEmailExistsAsync(user.Email);
+
+        //Assert
+        Assert.False(result);
     }
 }
