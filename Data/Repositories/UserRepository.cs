@@ -1,5 +1,6 @@
 ﻿using Data.Context;
 using Data.Entities;
+using Data.Factories;
 using Data.Interfaces;
 using Data.Models;
 using Data.Services;
@@ -20,13 +21,7 @@ public class UserRepository(DBContext context, UserServices userServices) : IUse
             {
                 if(!_userServices.CheckIfEmailExistsAsync(model.Email))
                 {
-                    UserEntity userEntity = new UserEntity
-                    {
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Email = model.Email,
-                        PasswordHash = model.Password,
-                    };
+                    UserEntity userEntity = UserFactory.Create(model);
 
                     var result = await _context.Users.AddAsync(userEntity);
                     await _context.SaveChangesAsync();
