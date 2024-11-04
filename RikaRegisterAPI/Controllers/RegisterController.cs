@@ -2,6 +2,8 @@
 using Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Amqp.Framing;
+using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
@@ -31,7 +33,11 @@ namespace RikaRegisterAPI.Controllers
                         var content = new StringContent(JsonConvert.SerializeObject(new { Email = model.Email }), Encoding.UTF8, "application/json");
                         var response = await http.PostAsync("https://verificationprovider.azurewebsites.net/api/GenerateVerificationCodeHttp?code=fpLuXfujgTLKWY17RYGFEkxcKFALp4JhmAfmsf91ZFnqAzFuA7oNhg%3D%3D", content);
 
-                        var response2 = await http.PostAsJsonAsync("https://verificationprovider.azurewebsites.net/api/GenerateVerificationCodeHttp?code=fpLuXfujgTLKWY17RYGFEkxcKFALp4JhmAfmsf91ZFnqAzFuA7oNhg%3D%3D", new { Email = model.Email });
+                        var message = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { Email = model.Email })));
+
+                        var queueClient = new QueueClient("Endpoint=sb://sb-emailprovider.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=QjQqQwMnKcdPepvC5Xh5Kc7ohPzEF/7hx+ASbAbHsVo=", "verification_request");
+                        await queueClient.SendAsync(message);
+
                         return Created(result.Message, result.StatusCode);
                     }
                     else if (result.StatusCode == 409)
