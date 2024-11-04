@@ -2,8 +2,6 @@
 using Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Amqp.Framing;
-using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
