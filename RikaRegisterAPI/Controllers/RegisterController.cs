@@ -32,7 +32,7 @@ namespace RikaRegisterAPI.Controllers
                     {
                         using var http = new HttpClient();
                         var content = new StringContent(JsonConvert.SerializeObject(new { Email = model.Email }), Encoding.UTF8, "application/json");
-                        var response = await http.PostAsync("https://verificationprovider.azurewebsites.net/api/GenerateVerificationCodeHttp?code=fpLuXfujgTLKWY17RYGFEkxcKFALp4JhmAfmsf91ZFnqAzFuA7oNhg%3D%3D", content);
+                        var response = await http.PostAsync(_configuration.GetValue<string>("VerificationProvider"), content);
 
                         var message = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { Email = model.Email })));
 
