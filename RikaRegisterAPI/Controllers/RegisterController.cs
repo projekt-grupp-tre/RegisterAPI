@@ -36,7 +36,7 @@ namespace RikaRegisterAPI.Controllers
 
                         var message = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { Email = model.Email })));
 
-                        var queueClient = new QueueClient(_configuration.GetValue<string>("SenderQueueSB"), "verification_request");
+                        var queueClient = new QueueClient(_configuration.GetValue<string>("SenderQueueSB"), _configuration.GetValue<string>("SenderQueue"));
                         await queueClient.SendAsync(message);
 
                         return Created(result.Message, result.StatusCode);
