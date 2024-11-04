@@ -12,12 +12,13 @@ namespace RikaRegisterAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegisterController(UserRepository userRepository) : ControllerBase
+    public class RegisterController(UserRepository userRepository, IConfiguration configuration) : ControllerBase
     {
         private readonly UserRepository _userRepository = userRepository;
+        private readonly IConfiguration _configuration = configuration;
 
         [HttpPost]
-        public async Task<IActionResult> CreateUserAsync([FromBody] SignUpModel model) 
+        public async Task<IActionResult> CreateUserAsync([FromBody] SignUpModel model)
         {
             if (model != null)
             {
@@ -35,7 +36,7 @@ namespace RikaRegisterAPI.Controllers
 
                         var message = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { Email = model.Email })));
 
-                        var queueClient = new QueueClient("Endpoint=sb://sb-emailprovider.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=QjQqQwMnKcdPepvC5Xh5Kc7ohPzEF/7hx+ASbAbHsVo=", "verification_request");
+                        var queueClient = new QueueClient(_configuration.GetValue<string>("SenderQueueSB"), "verification_request");
                         await queueClient.SendAsync(message);
 
                         return Created(result.Message, result.StatusCode);
@@ -46,7 +47,7 @@ namespace RikaRegisterAPI.Controllers
                     }
                 }
                 catch (Exception ex) { Debug.WriteLine(ex.Message); }
-                
+
                 return new ObjectResult(result);
             }
 
