@@ -1,12 +1,18 @@
 using Data.Context;
+using Data.Entities;
 using Data.Interfaces;
 using Data.Repositories;
 using Data.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DBContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("SqlDb")));
+
+builder.Services.AddIdentity<UserEntity, IdentityRole>()
+    .AddEntityFrameworkStores<DBContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
