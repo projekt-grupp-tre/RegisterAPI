@@ -21,7 +21,7 @@ namespace Test.UnitTest
         //}
 
         //[Fact]
-        //public async void SignInAsync_ShouldLoginAUser_ThenReturnBasicUserInformation()
+        //public async void SignInAsync_ShouldLoginAnUser_ThenReturnOkResult()
         //{
         //    //Arrange
         //    var signInModel = new SignInModel { Email = "test@test.se", Password = "Oklart", RememberMe = false };
@@ -35,7 +35,7 @@ namespace Test.UnitTest
         //}
 
         //[Fact]
-        //public async void SignInAsync_ShouldNotLoginAUser_ThenReturUnauthorizedResponse()
+        //public async void SignInAsync_ShouldNotLoginAnUser_ThenReturUnauthorizedResponse()
         //{
         //    //Arrange
         //    var signInModel = new SignInModel { Email = "test@test.se", Password = "Fellösenord", RememberMe = false };
