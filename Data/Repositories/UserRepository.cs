@@ -4,6 +4,7 @@ using Data.Factories;
 using Data.Interfaces;
 using Data.Models;
 using Data.Services;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Data.Repositories;
@@ -39,5 +40,26 @@ public class UserRepository(DBContext context, UserServices userServices) : IUse
         }
 
         return new StatusModel { StatusCode = 500, Message = "Internal server error" };
+    }
+
+    public async Task<UserEntity> GetUserEntityAsync(string email)
+    {
+        try
+        {
+            if (email != null)
+            {
+                var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+                if (userEntity != null)
+                {
+                    return userEntity;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("GetUserFromDatabaseAsync", ex.Message);
+        }
+
+        return null!;
     }
 }
