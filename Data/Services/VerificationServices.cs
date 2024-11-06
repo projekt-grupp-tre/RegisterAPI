@@ -14,17 +14,20 @@ namespace Data.Services
 
         public async Task<bool> VerifyCode(string email)
         {
-            var user = await _dbcontext.Users.FirstOrDefaultAsync(x => x.Email == email);
-            if (user == null)
+            try
             {
-                return false;
+                var userToBeUpdated = await _dbcontext.Users.FirstOrDefaultAsync(x => x.Email == email);
+                if (userToBeUpdated != null)
+                {
+                    UserEntity updatedUser = userToBeUpdated;
+                    updatedUser.EmailConfirmed = true;
+                    _dbcontext.Entry(userToBeUpdated).CurrentValues.SetValues(updatedUser);
+                    await _dbcontext.SaveChangesAsync();
+                    return true;
+                }
             }
-            else
-            {
-                _dbcontext.Entry(user).CurrentValues.SetValues(user.EmailConfirmed = true);
-                await _dbcontext.SaveChangesAsync();
-                return true;
-            }
+            catch { }
+            return false;
         }
     }
 }
