@@ -1,0 +1,33 @@
+﻿using Data.Entities;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+namespace Data.Factories;
+
+public class GenerateJwtTokenFactory
+{
+    public string GenerateJwtToken(UserEntity userEntity)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, userEntity.Id),
+            new Claim(JwtRegisteredClaimNames.Email, userEntity.Email!),
+            new Claim("firstName", userEntity.FirstName),
+            new Claim("lastName", userEntity.LastName),
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Jwt-Secret-key")!));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: "https://localhost:7286",
+            audience: "https://localhost:7259",
+            claims: claims,
+            expires: DateTime.Now.AddHours(1),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+}
