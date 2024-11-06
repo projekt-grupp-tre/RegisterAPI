@@ -20,8 +20,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<VerificationServices>();
-
-
+builder.Services.AddScoped<UserManager<UserEntity>>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
