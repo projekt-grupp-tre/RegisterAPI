@@ -17,7 +17,6 @@ namespace RikaRegisterAPI.Controllers
                 var userEntity = await _userRepository.GetUserEntityAsync(email);
                 return userEntity;
             }
-
             return null!;
         }
     }
