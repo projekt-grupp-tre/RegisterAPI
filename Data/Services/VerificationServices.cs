@@ -19,15 +19,9 @@ namespace Data.Services
             {
                 return false;
             }
-            user.EmailConfirmed = true;
-            var result = await _userManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
+            else
             {
-                return false;
-            }
-            else 
-            {
+                _dbcontext.Entry(user).CurrentValues.SetValues(user.EmailConfirmed = true);
                 await _dbcontext.SaveChangesAsync();
                 return true;
             }
