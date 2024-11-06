@@ -21,14 +21,14 @@ namespace Data.Services
             }
             user.EmailConfirmed = true;
             var result = await _userManager.UpdateAsync(user);
-            await _dbcontext.SaveChangesAsync();
 
             if (!result.Succeeded)
             {
                 return false;
             }
             else 
-            {                  
+            {
+                await _dbcontext.SaveChangesAsync();
                 return true;
             }
         }
