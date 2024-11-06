@@ -12,7 +12,7 @@ public static class UserFactory
             FirstName = signUpModel.FirstName,
             LastName = signUpModel.LastName,
             Email = signUpModel.Email,
-            PasswordHash = signUpModel.Password,
+            UserName = signUpModel.Email
         };
     }
 }
