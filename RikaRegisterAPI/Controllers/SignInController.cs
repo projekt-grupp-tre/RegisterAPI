@@ -34,8 +34,10 @@ namespace RikaRegisterAPI.Controllers
                         });
                     }
                 }
+
                 return Unauthorized();
             }
+
             return BadRequest();
         }
     }
