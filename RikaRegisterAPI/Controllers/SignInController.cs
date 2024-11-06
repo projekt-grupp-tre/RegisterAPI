@@ -13,7 +13,7 @@ namespace RikaRegisterAPI.Controllers
     {
         private readonly UserManager<UserEntity> _userManager = userManager;
         private readonly SignInManager<UserEntity> _signInManager = signInManager;
-        private readonly GenerateJwtTokenFactory _tokenFactory;
+        private readonly GenerateJwtTokenFactory _tokenFactory = tokenFactory;
 
         [HttpPost]
         public async Task<IActionResult> SignInAsync([FromBody] SignInModel signInModel)
@@ -30,11 +30,6 @@ namespace RikaRegisterAPI.Controllers
                         return Ok(new
                         {
                             jwttoken = token,
-                            id = user.Id,
-                            firstName = user.FirstName,
-                            lastName = user.LastName,
-                            email = user.Email,
-                            imageUrl = user.ImageUrl ?? "default-profile-picture.jpg",
                         });
                     }
                 }
