@@ -1,10 +1,6 @@
-﻿
+﻿namespace Data.Models;
 
-namespace Data.Models
+public class VerificationEmailModel
 {
-    public class VerificationEmailModel
-    {
-        public string Email { get; set; } = null!;
-
-    }
+    public string Email { get; set; } = null!;
 }
