@@ -20,18 +20,17 @@ namespace Data.Services
                 return false;
             }
             user.EmailConfirmed = true;
-          var result= await _userManager.UpdateAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+            await _dbcontext.SaveChangesAsync();
+
             if (!result.Succeeded)
             {
                 return false;
-
             }
             else 
             {                  
                 return true;
-
             }
-       
         }
     }
 }
