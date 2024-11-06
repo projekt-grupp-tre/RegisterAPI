@@ -19,6 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<VerificationServices>();
 
 
 var app = builder.Build();
