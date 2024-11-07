@@ -10,12 +10,12 @@ namespace Data.Factories;
 
 public class GenerateJwtTokenFactory
 {
-    private readonly IConfiguration _configuration;
+    //private readonly IConfiguration _configuration;
 
-    public GenerateJwtTokenFactory(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
+    //public GenerateJwtTokenFactory(IConfiguration configuration)
+    //{
+    //    _configuration = configuration;
+    //}
 
     public string GenerateJwtToken(UserEntity userEntity)
     {

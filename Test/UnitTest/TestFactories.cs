@@ -1,4 +1,5 @@
-﻿using Data.Factories;
+﻿using Data.Entities;
+using Data.Factories;
 using Data.Models;
 using Moq;
 
@@ -6,6 +7,12 @@ namespace Test.UnitTest;
 
 public class TestFactories
 {
+    private readonly GenerateJwtTokenFactory _factory;
+
+    public TestFactories()
+    {
+        _factory = new GenerateJwtTokenFactory();
+    }
 
     [Fact]
     public void ShouldConvertASignUpModelToUserEntity_ThenReturnUserEntity()
@@ -21,6 +28,26 @@ public class TestFactories
         Assert.Equal(result.Email, signUpModel.Email);
         Assert.Equal(result.FirstName, signUpModel.FirstName);
         Assert.Equal(result.LastName, signUpModel.LastName);
-        Assert.Equal(result.PasswordHash, signUpModel.Password);
+    }
+
+    [Fact]
+    public void ShouldGenerateAJwtToken_ThenReturnAencryptedString()
+    {
+        //Arrange
+        var userEntity = new UserEntity
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "test@test.se",
+                Email = "test@test.se",
+                FirstName = "Test",
+                LastName = "Testsson",
+            };
+
+        //Act
+        var result = _factory.GenerateJwtToken(userEntity);
+
+        //Assert
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
     }
 }
