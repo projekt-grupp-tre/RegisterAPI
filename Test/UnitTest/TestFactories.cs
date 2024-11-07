@@ -13,7 +13,6 @@ public class TestFactories
         //Arrange
         var signUpModel = new SignUpModel { Email = "test@test.se", FirstName = "Test", LastName = "Testsson", Password = "Oklart" };
 
-
         //Act
         var result = UserFactory.Create(signUpModel);
 
