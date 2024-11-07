@@ -12,6 +12,13 @@ namespace Data.Services
         private readonly DBContext _dbcontext = dbcontext;
         private readonly UserManager<UserEntity> _userManager=userManager;
 
+        public VerificationServices(DBContext context)
+        {
+            Context = context;
+        }
+
+        public DBContext Context { get; }
+
         public async Task<bool> VerifyCode(string email)
         {
             try
