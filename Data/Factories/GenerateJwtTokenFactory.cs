@@ -10,12 +10,12 @@ namespace Data.Factories;
 
 public class GenerateJwtTokenFactory
 {
-    //private readonly IConfiguration _configuration;
+    private readonly IConfiguration _configuration;
 
-    //public GenerateJwtTokenFactory(IConfiguration configuration)
-    //{
-    //    _configuration = configuration;
-    //}
+    public GenerateJwtTokenFactory(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
     public string GenerateJwtToken(UserEntity userEntity)
     {
@@ -28,7 +28,7 @@ public class GenerateJwtTokenFactory
             new Claim("imageUrl", userEntity.ImageUrl ?? "default-profile-picture.jpg" )
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("b215a3db-7f30-4584-a2a2-de476e4de617"));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Values:Jwt-Secret-key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

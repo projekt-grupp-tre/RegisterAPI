@@ -34,7 +34,7 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = "https://localhost:7286",
         ValidAudience = "https://localhost:7259",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Jwt-Secret-key") ?? "b215a3db-7f30-4584-a2a2-de476e4de617"))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Values:Jwt-Secret-key"]!))
     };
 });
 

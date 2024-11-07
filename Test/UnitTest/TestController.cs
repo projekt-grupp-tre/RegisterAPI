@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using RikaRegisterAPI.Controllers;
 
@@ -36,6 +37,7 @@ namespace Test.UnitTest
         private readonly Mock<SignInManager<UserEntity>> _signInManagerMock;
         private readonly GenerateJwtTokenFactory _generateJwtTokenFactory;
         private readonly SignInController _controller;
+        private readonly IConfiguration _configuration;
 
         public TestController()
         {
@@ -53,7 +55,17 @@ namespace Test.UnitTest
                 userClaimsPrincipalFactoryMock.Object,
                 null!, null!, null!, null!);
 
-            _generateJwtTokenFactory = new GenerateJwtTokenFactory();
+
+            _configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                { "Jwt:Key", "TestSecretKey" },
+                { "Jwt:Issuer", "TestIssuer" },
+                { "Jwt:Audience", "TestAudience" }
+            })
+            .Build();
+
+            _generateJwtTokenFactory = new GenerateJwtTokenFactory(_configuration);
 
             _controller = new SignInController(
                 _userManagerMock.Object,
