@@ -26,7 +26,7 @@ namespace Data.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error verifying code: {ex.Message}")
+                Console.WriteLine($"Error verifying code: {ex.Message}");
             }
 
             return false;
