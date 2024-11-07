@@ -16,17 +16,19 @@ namespace Data.Services
         {
             try
             {
-                var userToBeUpdated = await _dbcontext.Users.FirstOrDefaultAsync(x => x.Email == email);
-                if (userToBeUpdated != null)
+                var user = await _dbcontext.Users.FirstOrDefaultAsync(x => x.Email == email);
+                if (user != null)
                 {
-                    UserEntity updatedUser = userToBeUpdated;
-                    updatedUser.EmailConfirmed = true;
-                    _dbcontext.Entry(userToBeUpdated).CurrentValues.SetValues(updatedUser);
+                    user.EmailConfirmed = true;
                     await _dbcontext.SaveChangesAsync();
                     return true;
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error verifying code: {ex.Message}")
+            }
+
             return false;
         }
     }
