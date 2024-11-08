@@ -9,6 +9,13 @@ namespace Data.Factories;
 
 public class GenerateJwtTokenFactory
 {
+    private readonly IConfiguration _configuration;
+
+    public GenerateJwtTokenFactory(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     public string GenerateJwtToken(UserEntity userEntity)
     {
         var claims = new List<Claim>
@@ -26,7 +33,7 @@ public class GenerateJwtTokenFactory
             new Claim("gender", userEntity.GenderId.ToString() ?? "")
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("b215a3db-7f30-4584-a2a2-de476e4de617"));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetConnectionString("Jwt-Secret-key")!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

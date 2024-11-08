@@ -38,7 +38,6 @@ namespace RikaRegisterAPI.Controllers
                             return Ok(new { JwtToken = token});
                         }
                     }
-
                     return Unauthorized("User not found");
                 }
             }
