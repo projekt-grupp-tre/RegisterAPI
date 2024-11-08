@@ -25,7 +25,13 @@ public class GenerateJwtTokenFactory
             new Claim(JwtRegisteredClaimNames.Email, userEntity.Email!),
             new Claim("firstName", userEntity.FirstName),
             new Claim("lastName", userEntity.LastName),
-            new Claim("imageUrl", userEntity.ImageUrl ?? "default-profile-picture.jpg" )
+            new Claim("imageUrl", userEntity.ImageUrl ?? "default-profile-picture.jpg" ),
+            new Claim("address", userEntity.Address ?? ""),
+            new Claim("city", userEntity.City ?? ""),
+            new Claim("postalCode", userEntity.PostalCode ?? ""),
+            new Claim("country", userEntity.Country ?? ""),
+            new Claim("age", userEntity.Age.ToString() ?? ""),
+            new Claim("gender", userEntity.GenderId.ToString() ?? "")
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Values:Jwt-Secret-key"]!));
