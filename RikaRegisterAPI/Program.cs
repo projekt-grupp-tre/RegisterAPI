@@ -24,25 +24,6 @@ builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<VerificationServices>();
 builder.Services.AddScoped<UserManager<UserEntity>>();
 
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Values:JwtSecretKey"]!)),
-        ValidateIssuerSigningKey = true,
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ClockSkew = TimeSpan.FromMinutes(5)
-    };
-});
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
