@@ -2,8 +2,10 @@
 using Data.Factories;
 using Data.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using RikaRegisterAPI.Controllers;
 
@@ -11,41 +13,78 @@ namespace Test.UnitTest
 {
     public class TestController
     {
-        //private readonly Mock<UserManager<UserEntity>> _userManagerMock;
-        //private readonly Mock<SignInManager<UserEntity>> _signInManagerMock;
-        //private readonly SignInController _controller;
+        private SignInModel CreateASignInModelRequest()
+        {
+            return new SignInModel
+            {
+                Email = "test@test.se",
+                Password = "Bytmig123!",
+                RememberMe = true
+            };
+        }
 
-        //public TestController()
-        //{
-        //    _controller = new SignInController(_userManagerMock.Object, _signInManagerMock.Object);
-        //}
+        private SignInModel CreateAIncorrectSignInModelRequest()
+        {
+            return new SignInModel
+            {
+                Email = "",
+                Password = "Bytmig123!",
+                RememberMe = true
+            };
+        }
 
-        //[Fact]
-        //public async void SignInAsync_ShouldLoginAnUser_ThenReturnOkResult()
-        //{
-        //    //Arrange
-        //    var signInModel = new SignInModel { Email = "test@test.se", Password = "Oklart", RememberMe = false };
-        //    var user = new UserEntity { Id = "1", FirstName = "Test", LastName = "Testsson", Email = "test@test.se", ImageUrl = null, PasswordHash = "Oklart" };
-        //    _signInManagerMock.Setup(x => x.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.RememberMe, false)).ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
-        //    //Act
-        //    var result = await _controller.SignInAsync(signInModel);
+        private readonly Mock<UserManager<UserEntity>> _userManagerMock;
+        private readonly Mock<SignInManager<UserEntity>> _signInManagerMock;
+        private readonly GenerateJwtTokenFactory _generateJwtTokenFactory;
+        private readonly SignInController _controller;
+        private readonly IConfiguration _configuration;
 
-        //    //Assert
-        //    Assert.IsType<OkResult>(result);
-        //}
+        public TestController()
+        {
+            var userStoreMock = new Mock<IUserStore<UserEntity>>();
 
-        //[Fact]
-        //public async void SignInAsync_ShouldNotLoginAnUser_ThenReturUnauthorizedResponse()
-        //{
-        //    //Arrange
-        //    var signInModel = new SignInModel { Email = "test@test.se", Password = "Fellösenord", RememberMe = false };
-        //    var user = new UserEntity { Id = "1", FirstName = "Test", LastName = "Testsson", Email = "test@test.se", ImageUrl = null, PasswordHash = "Oklart" };
-        //    _signInManagerMock.Setup(x => x.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.RememberMe, false)).ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
-        //    //Act
-        //    var result = await _controller.SignInAsync(signInModel);
+            _userManagerMock = new Mock<UserManager<UserEntity>>(
+                userStoreMock.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
-        //    //Assert
-        //    Assert.IsType<UnauthorizedResult>(result);
-        //}
+            var contextAccessorMock = new Mock<IHttpContextAccessor>();
+            var userClaimsPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<UserEntity>>();
+
+            _signInManagerMock = new Mock<SignInManager<UserEntity>>(
+                _userManagerMock.Object,
+                contextAccessorMock.Object,
+                userClaimsPrincipalFactoryMock.Object,
+                null!, null!, null!, null!);
+
+
+            _configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                { "Jwt:Key", "TestSecretKey" },
+                { "Jwt:Issuer", "TestIssuer" },
+                { "Jwt:Audience", "TestAudience" }
+            })
+            .Build();
+
+            _generateJwtTokenFactory = new GenerateJwtTokenFactory(_configuration);
+
+            _controller = new SignInController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _generateJwtTokenFactory);
+        }
+
+        [Fact]
+        public async Task SignInAsync_ShouldReturnBadRequest_WhenModelStateIsInvalid()
+        {
+            //Arrange
+            var signInModel = CreateAIncorrectSignInModelRequest();
+            _controller.ModelState.AddModelError("Email", "You must enter an email");
+
+            //Act
+            var result = await _controller.SignInAsync(signInModel);
+
+            //Assert
+            Assert.IsType<BadRequestResult>(result);
+        }
     }
 }
