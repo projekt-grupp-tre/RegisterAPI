@@ -13,19 +13,11 @@ namespace RikaRegisterAPI.Controllers
     [ApiController]
     public class SignInControllerFactory : ControllerBase
     {
-        public class SignInController : ControllerBase
+        public class SignInController(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager) : ControllerBase
         {
-            private readonly UserManager<UserEntity> _userManager;
-            private readonly SignInManager<UserEntity> _signInManager;
-            private readonly GenerateJwtTokenFactory _tokenFactory;
-
-            public SignInController(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager, GenerateJwtTokenFactory tokenFactory)
-            {
-                _userManager = userManager;
-                _signInManager = signInManager;
-                _tokenFactory = tokenFactory;
-            }
-
+            private readonly UserManager<UserEntity> _userManager = userManager;
+            private readonly SignInManager<UserEntity> _signInManager = signInManager;
+            //private readonly GenerateJwtTokenFactory _tokenFactory = tokenFactory;
 
             [HttpPost]
             public async Task<IActionResult> SignInAsync([FromBody] SignInModel signInModel)
@@ -40,11 +32,12 @@ namespace RikaRegisterAPI.Controllers
                             var user = await _userManager.FindByEmailAsync(signInModel.Email);
                             if (user != null)
                             {
-                                var token = _tokenFactory.GenerateJwtToken(user);
-                                return Ok(new
-                                {
-                                    jwttoken = token,
-                                });
+                                //var token = _tokenFactory.GenerateJwtToken(user);
+                                return Ok();
+                                //return Ok(new
+                                //{
+                                //    jwttoken = token,
+                                //});
                             }
                         }
 
