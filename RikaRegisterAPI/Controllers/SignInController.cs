@@ -11,10 +11,8 @@ namespace RikaRegisterAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SignInControllerFactory : ControllerBase
+    public class SignInController(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager) : ControllerBase
     {
-        public class SignInController(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager) : ControllerBase
-        {
             private readonly UserManager<UserEntity> _userManager = userManager;
             private readonly SignInManager<UserEntity> _signInManager = signInManager;
             //private readonly GenerateJwtTokenFactory _tokenFactory = tokenFactory;
@@ -29,6 +27,7 @@ namespace RikaRegisterAPI.Controllers
                         var result = await _signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.RememberMe, false);
                         if (result.Succeeded)
                         {
+
                             var user = await _userManager.FindByEmailAsync(signInModel.Email);
                             if (user != null)
                             {
@@ -51,6 +50,5 @@ namespace RikaRegisterAPI.Controllers
 
                 return BadRequest("Invalid Data");
             }
-        }
     }
 }
