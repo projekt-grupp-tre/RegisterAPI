@@ -33,7 +33,7 @@ namespace RikaRegisterAPI.Controllers
                         {
                             var token = _tokenFactory.GenerateJwtToken(user);
 
-                            HttpContext.Session.SetString("JwtToken", token);
+                            //HttpContext.Session.SetString("JwtToken", token);
 
                             return Ok();
                         }
