@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using RikaRegisterAPI.Controllers;
-using static RikaRegisterAPI.Controllers.SignInControllerFactory;
 
 namespace Test.UnitTest
 {
