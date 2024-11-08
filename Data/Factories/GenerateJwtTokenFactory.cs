@@ -37,8 +37,8 @@ public class GenerateJwtTokenFactory
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: "https://localhost:7286",
-            audience: "https://localhost:7259",
+            issuer: "https://rikaregistrationapi-ewdqdmb7ayhwhkaw.westeurope-01.azurewebsites.net",
+            //audience: "",
             claims: claims,
             expires: DateTime.Now.AddHours(1),
             signingCredentials: creds);

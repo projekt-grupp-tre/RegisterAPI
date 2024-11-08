@@ -29,11 +29,10 @@ builder.Services.AddAuthentication(x =>
     x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidateAudience = true,
+        ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "https://localhost:7286",
-        ValidAudience = "https://localhost:7259",
+        ValidIssuer = "https://rikaregistrationapi-ewdqdmb7ayhwhkaw.westeurope-01.azurewebsites.net",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Values:Jwt-Secret-key"]!))
     };
 });
