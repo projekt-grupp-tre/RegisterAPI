@@ -24,13 +24,14 @@ builder.Services.AddAuthentication(x =>
 })
 .AddJwtBearer(x =>
 {
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
     x.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("b215a3db-7f30-4584-a2a2-de476e4de617"))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("b215a3db-7f30-4584-a2a2-de476e4de617")),
+        ValidateIssuer = false,
+        ValidateAudience = false
     };
 });
 

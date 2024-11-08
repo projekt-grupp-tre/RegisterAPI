@@ -32,10 +32,10 @@ namespace RikaRegisterAPI.Controllers
                         if (user != null)
                         {
                             var token = _tokenFactory.GenerateJwtToken(user);
-                            return Ok(new
-                            {
-                                jwttoken = token,
-                            });
+
+                            HttpContext.Session.SetString("JwtToken", token);
+
+                            return Ok();
                         }
                     }
 
