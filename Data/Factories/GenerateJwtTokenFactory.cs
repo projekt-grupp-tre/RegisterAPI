@@ -33,7 +33,7 @@ public class GenerateJwtTokenFactory
             new Claim("gender", userEntity.GenderId.ToString() ?? "")
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetConnectionString("Jwt-Secret-key")!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Values:Jwt-Secret-key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
