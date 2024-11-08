@@ -37,6 +37,14 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -46,6 +54,8 @@ builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<VerificationServices>();
 builder.Services.AddScoped<UserManager<UserEntity>>();
 var app = builder.Build();
+
+app.UseCors("AllowAllOrigins");
 
 if (app.Environment.IsDevelopment())
 {
