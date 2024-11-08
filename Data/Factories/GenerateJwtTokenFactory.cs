@@ -33,12 +33,11 @@ public class GenerateJwtTokenFactory
             new Claim("gender", userEntity.GenderId.ToString() ?? "")
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Values:Jwt-Secret-key"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("b215a3db-7f30-4584-a2a2-de476e4de617"));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             issuer: "https://rikaregistrationapi-ewdqdmb7ayhwhkaw.westeurope-01.azurewebsites.net",
-            //audience: "",
             claims: claims,
             expires: DateTime.Now.AddHours(1),
             signingCredentials: creds);
