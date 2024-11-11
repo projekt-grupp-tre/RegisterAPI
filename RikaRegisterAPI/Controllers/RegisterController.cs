@@ -31,11 +31,11 @@ namespace RikaRegisterAPI.Controllers
                     {
                         using var http = new HttpClient();
                         var content = new StringContent(JsonConvert.SerializeObject(new { Email = model.Email }), Encoding.UTF8, "application/json");
-                        var response = await http.PostAsync("https://verificationprovider.azurewebsites.net/api/GenerateVerificationCodeHttp?code=fpLuXfujgTLKWY17RYGFEkxcKFALp4JhmAfmsf91ZFnqAzFuA7oNhg%3D%3D", content);
+                        var response = await http.PostAsync("https://verification-rika.azurewebsites.net/api/GenerateVerificationCodeHttp?code=BItffmctv-BTFfGNf9NM61EP5Mz1AVueZv_l54lDiED8AzFuZoyorg%3D%3D", content);
 
                         var message = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { Email = model.Email })));
 
-                        var queueClient = new QueueClient("Endpoint=sb://sb-emailprovider.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=QjQqQwMnKcdPepvC5Xh5Kc7ohPzEF/7hx+ASbAbHsVo=", "verification_request");
+                        var queueClient = new QueueClient("Endpoint=sb://sb-emailprovider-v2.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=sBIcy5Zaw85JUZSKVh07clpqUEGvjXDoh+ASbFhN8eg=", "verification_request");
                         await queueClient.SendAsync(message);
 
                         return Created(result.Message, result.StatusCode);
