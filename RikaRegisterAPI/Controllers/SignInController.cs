@@ -35,7 +35,7 @@ namespace RikaRegisterAPI.Controllers
 
                             //HttpContext.Session.SetString("JwtToken", token);
 
-                            return Ok(new { JwtToken = token});
+                            return Ok(new { JwtToken = token });
                         }
                     }
                     return Unauthorized("User not found");

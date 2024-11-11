@@ -21,8 +21,8 @@ builder.Services.AddIdentity<UserEntity, IdentityRole>()
 builder.Services.AddScoped<GenerateJwtTokenFactory>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<AuthServices>();
 builder.Services.AddScoped<VerificationServices>();
-builder.Services.AddScoped<UserManager<UserEntity>>();
 
 builder.Services.AddCors(options =>
 {

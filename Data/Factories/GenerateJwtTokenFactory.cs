@@ -1,8 +1,10 @@
 ﻿using Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Data.Factories;
@@ -22,8 +24,8 @@ public class GenerateJwtTokenFactory
         {
             new Claim(JwtRegisteredClaimNames.Sub, userEntity.Id),
             new Claim(JwtRegisteredClaimNames.Email, userEntity.Email!),
-            new Claim("firstName", userEntity.FirstName),
-            new Claim("lastName", userEntity.LastName),
+            new Claim("firstName", userEntity.FirstName ?? ""),
+            new Claim("lastName", userEntity.LastName ?? ""),
             new Claim("imageUrl", userEntity.ImageUrl ?? "default-profile-picture.jpg" ),
             new Claim("address", userEntity.Address ?? ""),
             new Claim("city", userEntity.City ?? ""),
@@ -43,5 +45,15 @@ public class GenerateJwtTokenFactory
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
     }
 }
