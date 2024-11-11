@@ -24,20 +24,20 @@ namespace RikaRegisterAPI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.RememberMe, false);
-                    if (result.Succeeded)
+                    var user = await _userManager.FindByEmailAsync(signInModel.Email);
+                    if (user!.EmailConfirmed)
                     {
-
-                        var user = await _userManager.FindByEmailAsync(signInModel.Email);
-                        if (user != null)
+                        var result = await _signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.RememberMe, false);
+                        if (result.Succeeded)
                         {
-                            var token = _tokenFactory.GenerateJwtToken(user);
-
-                            //HttpContext.Session.SetString("JwtToken", token);
-
-                            return Ok(new { JwtToken = token});
+                            if (user != null)
+                            {
+                                var token = _tokenFactory.GenerateJwtToken(user);
+                                return Ok(new { JwtToken = token });
+                            }
                         }
                     }
+    
                     return Unauthorized("User not found");
                 }
             }
