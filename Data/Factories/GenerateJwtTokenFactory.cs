@@ -24,7 +24,7 @@ public class GenerateJwtTokenFactory
             new Claim(JwtRegisteredClaimNames.Email, userEntity.Email!),
             new Claim("firstName", userEntity.FirstName),
             new Claim("lastName", userEntity.LastName),
-            new Claim("imageUrl", userEntity.ImageUrl ?? "default-profile-picture.jpg" ),
+            new Claim("imageUrl", userEntity.ImageUrl ?? "https://storagerika.blob.core.windows.net/files/avatar.jpg" ),
             new Claim("address", userEntity.Address ?? ""),
             new Claim("city", userEntity.City ?? ""),
             new Claim("postalCode", userEntity.PostalCode ?? ""),
