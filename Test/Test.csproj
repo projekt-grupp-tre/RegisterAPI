@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\RikaRegisterAPI\RikaRegisterAPI.csproj" />
   </ItemGroup>
 
